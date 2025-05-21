@@ -32,55 +32,62 @@ STEP-8: Repeat the above steps to generate the entire cipher text.
 ```
 #include <stdio.h>
 #include <string.h>
-#include <ctype.h>
 
-void vigenere_encrypt(char *msg, char *key, char *enc) {
-    int msgLen = strlen(msg), keyLen = strlen(key);
-    for (int i = 0, j = 0; i < msgLen; i++) {
-        if (isalpha(msg[i])) {
-            enc[i] = ((toupper(msg[i]) - 'A' + toupper(key[j % keyLen]) - 'A') % 26) + 'A';
-            j++;
-        } else {
-            enc[i] = msg[i];
+// Function to perform Vigenère encryption
+void vigenereEncrypt(char text[], const char key[]) {
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+    
+    for (int i = 0; i < textLen; i++) {
+        char c = text[i];
+        if (c >= 'A' && c <= 'Z') { // Encrypt uppercase letters
+            text[i] = ((c - 'A' + key[i % keyLen] - 'A') % 26) + 'A';
+        } else if (c >= 'a' && c <= 'z') { // Encrypt lowercase letters
+            text[i] = ((c - 'a' + key[i % keyLen] - 'A') % 26) + 'a';
         }
     }
-    enc[msgLen] = '\0';
 }
 
-void vigenere_decrypt(char *enc, char *key, char *dec) {
-    int encLen = strlen(enc), keyLen = strlen(key);
-    for (int i = 0, j = 0; i < encLen; i++) {
-        if (isalpha(enc[i])) {
-            dec[i] = ((toupper(enc[i]) - 'A' - (toupper(key[j % keyLen]) - 'A') + 26) % 26) + 'A';
-            j++;
-        } else {
-            dec[i] = enc[i];
+// Function to perform Vigenère decryption
+void vigenereDecrypt(char text[], const char key[]) {
+    int textLen = strlen(text);
+    int keyLen = strlen(key);
+    
+    for (int i = 0; i < textLen; i++) {
+        char c = text[i];
+        if (c >= 'A' && c <= 'Z') { // Decrypt uppercase letters
+            text[i] = ((c - 'A' - (key[i % keyLen] - 'A') + 26) % 26) + 'A';
+        } else if (c >= 'a' && c <= 'z') { // Decrypt lowercase letters
+            text[i] = ((c - 'a' - (key[i % keyLen] - 'A') + 26) % 26) + 'a';
         }
     }
-    dec[encLen] = '\0';
 }
 
 int main() {
-    char msg[1000], key[100];
-    char enc[1000], dec[1000];
+    char key[100], message[1000];
     
-    printf("Simulation of Vigenere Cipher\n");
-    printf("Enter the message: ");
-    scanf(" %s", msg);
+    // Take key and message input from the user
     printf("Enter the key: ");
-    scanf(" %s", key);
+    fgets(key, sizeof(key), stdin);
+    key[strcspn(key, "\n")] = 0; // Remove newline character from key
     
-    vigenere_encrypt(msg, key, enc);
-    printf("Encrypted Message: %s\n", enc);
+    printf("Enter the message: ");
+    fgets(message, sizeof(message), stdin);
+    message[strcspn(message, "\n")] = 0; // Remove newline character from message
     
-    vigenere_decrypt(enc, key, dec);
-    printf("Decrypted Message: %s\n", dec);
+    // Encrypt the message
+    vigenereEncrypt(message, key);
+    printf("Encrypted Message: %s\n", message);
+    
+    // Decrypt the message back to the original
+    vigenereDecrypt(message, key);
+    printf("Decrypted Message: %s\n", message);
     
     return 0;
 }
 ```
 ## OUTPUT:
-![image](https://github.com/user-attachments/assets/f08b1c1b-78c4-4441-9509-be5c5a9e9852)
+![image](https://github.com/user-attachments/assets/09ef3f41-ea75-4529-b304-13f3ca0c4da3)
 
 ## RESULT:
 Hence the given Vigenere Cipher program executed successfully.
